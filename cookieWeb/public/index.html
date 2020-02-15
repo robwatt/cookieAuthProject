@@ -1,0 +1,126 @@
+<!-- Copyright (c) Microsoft Corporation. All rights reserved. Licensed under the MIT License. -->
+<!-- This file shows how to design a first-run page that provides a welcome screen to the user about the features of the add-in. -->
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='UTF-8' />
+    <meta http-equiv='X-UA-Compatible' content='IE=Edge' />
+    <meta name='viewport' content='width=device-width, initial-scale=1' />
+    <title>Contoso Task Pane Add-in</title>
+
+    <!-- Office JavaScript API -->
+    <script
+      type='text/javascript'
+      src='https://appsforoffice.microsoft.com/lib/1.1/hosted/office.js'
+    ></script>
+
+    <!-- For more information on Office UI Fabric, visit https://developer.microsoft.com/fabric. -->
+    <!-- <link rel='stylesheet' href='https://static2.sharepointonline.com/files/fabric/office-ui-fabric-core/9.6.1/css/fabric.min.css'/> -->
+
+    <link
+      rel='stylesheet'
+      href='https://static2.sharepointonline.com/files/fabric/office-ui-fabric-js/1.4.0/css/fabric.min.css'
+    />
+    <link
+      rel='stylesheet'
+      href='https://static2.sharepointonline.com/files/fabric/office-ui-fabric-js/1.4.0/css/fabric.components.min.css'
+    />
+    <script src='https://static2.sharepointonline.com/files/fabric/office-ui-fabric-js/1.4.0/js/fabric.min.js'></script>
+
+    <script type='text/javascript'>
+      var ButtonElements = document.querySelectorAll('.ms-Button');
+      for (var i = 0; i < ButtonElements.length; i++) {
+        new fabric['Button'](ButtonElements[i], function() {
+          // Insert Event Here
+        });
+      }
+    </script>
+    <script type='text/javascript'>
+      var TextFieldElements = document.querySelectorAll('.ms-TextField');
+      for (var i = 0; i < TextFieldElements.length; i++) {
+        new fabric['TextField'](TextFieldElements[i]);
+      }
+    </script>
+
+    <!-- Template styles -->
+    <link href='taskpane.css' rel='stylesheet' type='text/css' />
+
+    <script src='https://unpkg.com/axios/dist/axios.min.js'></script>
+    <script>
+      function login() {
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('psw').value;
+        const data = { email: email, password: password };
+        console.log('data', data);
+        const login = 'http://localhost:4000/login';
+        axios
+          .post(login.toString(), data, {
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            withCredentials: true
+          })
+          .then(response => {
+            console.log('response', response);
+            const status = document.getElementById('status');
+            console.log('data', response.data);
+            status.innerHTML = response.data;
+          })
+          .catch(error => console.error(error));
+      }
+    </script>
+    <script>
+      function requestAuthenticatedData() {
+        axios
+          .get('http://localhost:4000/authrequired2', {
+            withCredentials: true
+          })
+          .then(response => {
+            console.log('auth required response', response);
+            const data = document.getElementById('data');
+            console.log('data', response.data);
+            data.innerHTML = response.data;
+          })
+          .catch(error => console.error(error));
+      }
+    </script>
+  </head>
+
+  <body class='ms-font-m ms-welcome ms-Fabric'>
+    <div style='padding: 20px;'>
+      <div class='ms-TextField'>
+        <label class='ms-Label' for='email'><b>Email</b></label>
+        <input
+          class='ms-TextField-field'
+          type='text'
+          placeholder='Enter Email'
+          id='email'
+          required
+        />
+      </div>
+
+      <div class='ms-TextField'>
+        <label class='ms-Label' for='psw'><b>Password</b></label>
+        <input
+          class='ms-TextField-field'
+          type='password'
+          placeholder='Enter Password'
+          id='psw'
+          required
+        />
+      </div>
+
+      <button class='ms-Button' onclick='login()'>
+        <span class='ms-Button-label'>Login</span>
+      </button>
+
+      <div style='padding-top: 10px;font-size:large;'>Status: <span id='status'></span></div>
+
+      <button class='ms-Button' onclick='requestAuthenticatedData()'>
+        <span class='ms-Button-label'>Request Authenticated Data</span>
+      </button>
+      <div style='padding-top: 10px;font-size:large;'>Data: <span id='data'></span></div>
+    </div>
+  </body>
+</html>
