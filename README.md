@@ -3,6 +3,16 @@ Example of cookie based authentication using NodeJS
 
 Based on the work by https://medium.com/@evangow/server-authentication-basics-express-sessions-passport-and-curl-359b7456003d
 
+## Purpose
+
+The point of this project is to show how cookie based authentication works in a CORS environment.  There are 2 different clients:
+* Web client
+* Outlook add-in
+
+Outlook add-in by necessity run in a different origin than the server so it was a perfect client to use.  The web client makes it easy to test without the setup of the Outlook add-in.
+
+## Details
+
 This project builds out the example to include
 * CORS support
 * A seperate web application
