@@ -21,8 +21,8 @@ This project builds out the example to include
 There are 4 project in total - each needs to started individually
 * cookieAuthServer - this is the core server
 * cookieDB - this provides rudemtary user authentication support.  There are only 2 users stored in the 'database'
-** test@test.com
-** user2@example.com
+  - test@test.com
+  - user2@example.com
 * cookieWeb - web based implementation that uses the server
 * cookieAddin - Outlook add-in.  This is identical to the web implementation except it runs in Outlook
 
