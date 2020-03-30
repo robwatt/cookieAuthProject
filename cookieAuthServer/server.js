@@ -22,7 +22,7 @@ const port = process.env.PORT || 4000;
 passport.use(
   new LocalStrategy({ usernameField: 'email' }, (email, password, done) => {
     axios
-      .get(`${dbServer}/users?email=${email}`)
+      .get(`${dbServer}/users?email=${email.toLowerCase()}`)
       .then(res => {
         const user = res.data[0];
         console.log('user', user);
@@ -59,17 +59,25 @@ const app = express();
 // add & configure middleware
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+app.set('trust proxy', true);
 app.use(
   session({
     genid: req => {
       console.log('Inside session middleware genid function');
-      console.log(`Request object sessionID from client: ${req.sessionID}`);
-      return uuid(); // use UUIDs for session IDs
+      console.log(`Request object sessionID from client: ${req}, ${req.sessionID}`);
+      const value = uuid();
+      return value; // use UUIDs for session IDs
     },
     store: new FileStore(),
     secret: 'keyboard cat',
     resave: false,
+    proxy: true,
     saveUninitialized: true,
+    cookie: {
+      secure: true,
+      sameSite: 'none',
+      maxAge: 1000 * 60 * 60 * 24
+    }
   })
 );
 app.use(passport.initialize());
@@ -144,7 +152,7 @@ app.get('/authrequired2', (req, res) => {
   if (req.isAuthenticated()) {
     res.send(`you hit the 2nd endpoint that requires authentication: ${req.user.email}\n`);
   } else {
-    res.redirect('/');
+    res.send('you are not logged in');
   }
 });
 
@@ -159,4 +167,4 @@ app.listen(port, () => {
 //   cert: fs.readFileSync('./cert.pem'),
 //   passphrase: 'password'
 // }, app)
-// .listen(port);
+// .listen(port+10);
