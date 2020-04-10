@@ -9,20 +9,20 @@ The point of this project is to show how cookie based authentication works in a 
 * Web client
 * Outlook add-in
 
-Outlook add-in by necessity run in a different origin than the server so it was a perfect client to use.  The web client makes it easy to test without the setup of the Outlook add-in.
+Outlook add-in by necessity runs in a different origin than the server so it was a perfect client to use.  The web client makes it easy to test without the setup of the Outlook add-in.
 
 ## Details
 
-This project builds out the example to include
+This project builds out the above example to include
 * CORS support
 * A seperate web application
 * An Outlook add-in which has support for desktop and mobile
 
-There are 4 project in total - each needs to started individually
+There are 4 project in total - each needs to be started individually
 * cookieAuthServer - this is the core server
 * cookieDB - this provides rudemtary user authentication support.  There are only 2 users stored in the 'database'
-  - test@test.com
-  - user2@example.com
+  - test@test.com/password
+  - user2@example.com/password
 * cookieWeb - web based implementation that uses the server
 * cookieAddin - Outlook add-in.  This is identical to the web implementation except it runs in Outlook
 
@@ -45,4 +45,6 @@ cookieDB relies on process.env.PORT being set, otherwise it will default to port
 cookieWeb listens on port 8080.  This was designed mainly around being deployed locally.
 
 ## cookieAddin
-cookieAddin run on default ports as per Outlook add-in implementation.  That is port 3000 for local deployment
+cookieAddin runs on default ports as per Outlook add-in implementation.  That is port 3000 for local deployment.  
+
+If you want to run it on a mobile device, you will need to build the project and host it somewhere that is NOT localhost.  You will also need to modify the manifest.xml to point to the location you are hosting the add-in.
